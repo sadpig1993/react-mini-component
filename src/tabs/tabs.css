@@ -1,0 +1,70 @@
+:local .tabPane{
+
+}
+:local .tabBar{
+        border-bottom: 1px solid #d9d9d9;
+        display:inline-block;
+        margin-bottom: 16px;
+        position: relative;
+}
+:local .tabNav{
+    list-style:none;
+    overflow: auto;
+    margin:0;
+    padding:0;
+    border:0;
+    position:relative;
+}
+
+:local .tabBarItem{
+    float: left;
+    padding: 8px 20px;
+    display: block;
+    cursor: pointer;
+    text-decoration: none;
+    color:#000;
+    transition: color .3s cubic-bezier(.645, .045, .355, 1);
+}
+
+:local .activeBar{
+    float: left;
+    padding: 8px 20px;
+    display: block;
+    cursor: pointer;
+    text-decoration: none;
+    color:#000;
+}
+
+:local .activeBar{
+    float: left;
+    color: #2db7f5;
+}
+:local .tabBarItem:hover{
+    color: #57c5f7;
+}
+:local .tabinkBar{
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    box-sizing: border-box;
+    height: 2px;
+    background-color: #2db7f5;
+    transform: scaleX(1);
+    transform-origin: 0 0;
+    transform: translateZ(0);
+}
+:local .inkbar-forward{
+    transition: right .3s cubic-bezier(.645, .045, .355, 1),left .3s cubic-bezier(.645, .045, .355, 1) .09s;
+}
+:local .inkbar-backward{
+    transition: right .3s cubic-bezier(.645, .045, .355, 1) .09s,left .3s cubic-bezier(.645, .045, .355, 1);
+}
+:local .paneEnter {
+    opacity: .01;
+    transition: opacity 300ms ease-in;
+}
+
+:local .paneEnterActive {
+    opacity: 1;
+}
