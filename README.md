@@ -15,6 +15,16 @@ ReactDOM.render(
 );
 ```
 
+#### props
+
+```javascirpt
+speed: 500, // 动画速度
+autoplay: true, // 是否自动播放
+autoplaySpeed: 3000 // 自动播放延迟
+```
+
+
+
 ### tab标签
 
 ```javascript
