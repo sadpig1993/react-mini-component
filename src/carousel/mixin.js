@@ -154,6 +154,12 @@ var helpers = {
         style.WebkitTransition = '-webkit-transform ' + spec.speed + 'ms ' + spec.cssEase;
         style.transition = 'transform ' + spec.speed + 'ms ' + spec.cssEase;
         return style;
+    },
+    autoPlay: function () {
+
+    },
+    pause: function () {
+
     }
 };
 
