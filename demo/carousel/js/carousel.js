@@ -59,7 +59,7 @@
 	      null,
 	      React.createElement(
 	         'h1',
-	         null,
+	         { className: 'green' },
 	         '1'
 	      )
 	   ),
@@ -77,7 +77,7 @@
 	      null,
 	      React.createElement(
 	         'h1',
-	         null,
+	         { className: 'orange' },
 	         '3'
 	      )
 	   ),
