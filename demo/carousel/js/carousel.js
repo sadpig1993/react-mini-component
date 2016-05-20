@@ -20706,8 +20706,10 @@
 	        var _this2 = this;
 
 	        if (this.state.autoPlayTimer) {
+	            console.log(123);
 	            return;
 	        }
+	        console.log(2);
 	        var play = function play() {
 	            if (_this2.state.mounted) {
 	                var nextIndex = _this2.state.currentSlide + _this2.props.slidesToScroll;
@@ -20722,6 +20724,7 @@
 	    },
 	    pause: function pause() {
 	        if (this.state.autoPlayTimer) {
+	            console.log(1);
 	            window.clearInterval(this.state.autoPlayTimer);
 	            this.setState({
 	                autoPlayTimer: null
@@ -20843,6 +20846,9 @@
 	        if (this.state.animating) {
 	            return;
 	        }
+	        if (e.touches !== undefined) {
+	            this.onInnerSliderEnter();
+	        }
 	        var touches, posX, posY;
 
 	        posX = e.touches !== undefined ? e.touches[0].pageX : e.clientX;
@@ -20887,10 +20893,13 @@
 	        });
 	    },
 	    swipeEnd: function swipeEnd(e) {
+
 	        if (!this.state.dragging) {
 	            return;
 	        }
-
+	        if (e.touches !== undefined) {
+	            this.onInnerSliderLeave();
+	        }
 	        var touchObject = this.state.touchObject;
 	        var minSwipe = this.state.listWidth / this.props.touchThreshold;
 	        var swipeDirection = this.swipeDirection(touchObject);

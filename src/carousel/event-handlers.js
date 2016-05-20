@@ -10,6 +10,9 @@ var handlers = {
         if (this.state.animating) {
             return;
         }
+        if (e.touches !== undefined) {
+            this.onInnerSliderEnter();
+        }
         var touches, posX, posY;
 
         posX = (e.touches !== undefined) ? e.touches[0].pageX : e.clientX;
@@ -54,10 +57,13 @@ var handlers = {
         });
     },
     swipeEnd: function (e) {
+
         if (!this.state.dragging) {
             return;
         }
-
+        if (e.touches !== undefined) {
+            this.onInnerSliderLeave();
+        }
         var touchObject = this.state.touchObject;
         var minSwipe = this.state.listWidth/this.props.touchThreshold;
         var swipeDirection = this.swipeDirection(touchObject);
