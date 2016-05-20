@@ -4,7 +4,8 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
-        tabs: './demo/tabs/index.js'
+        tabs: './demo/tabs/index.js',
+        carousel: './demo/carousel/index.js'
     },
     output: {
         path: path.join(__dirname, '/demo/'),

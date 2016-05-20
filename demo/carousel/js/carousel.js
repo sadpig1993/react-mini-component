@@ -49,53 +49,47 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(33);
 
-	var Tab = __webpack_require__(175).Tab;
-	var TabPane = __webpack_require__(175).TabPane;
+	var Carousel = __webpack_require__(168);
 
 	ReactDOM.render(React.createElement(
-	  Tab,
-	  { activeKey: '2' },
-	  React.createElement(
-	    TabPane,
-	    { tab: 'tab 1', key: '1' },
-	    React.createElement(
-	      'span',
+	   Carousel,
+	   null,
+	   React.createElement(
+	      'div',
 	      null,
-	      'hello'
-	    )
-	  ),
-	  React.createElement(
-	    TabPane,
-	    { tab: 'tab 3', key: '5' },
-	    React.createElement(
-	      'span',
+	      React.createElement(
+	         'h1',
+	         null,
+	         '1'
+	      )
+	   ),
+	   React.createElement(
+	      'div',
 	      null,
-	      'hello'
-	    )
-	  ),
-	  React.createElement(
-	    TabPane,
-	    { tab: 'tab 4', key: '4' },
-	    React.createElement(
-	      'span',
+	      React.createElement(
+	         'h1',
+	         null,
+	         '2'
+	      )
+	   ),
+	   React.createElement(
+	      'div',
 	      null,
-	      'hello'
-	    )
-	  ),
-	  React.createElement(
-	    TabPane,
-	    { tab: 'tab 5', key: '3' },
-	    React.createElement(
-	      'span',
+	      React.createElement(
+	         'h1',
+	         null,
+	         '3'
+	      )
+	   ),
+	   React.createElement(
+	      'div',
 	      null,
-	      'hello'
-	    )
-	  ),
-	  React.createElement(
-	    TabPane,
-	    { tab: 'tab 2', key: '2' },
-	    React.createElement('img', { src: 'https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=1142132471,1812621697&fm=80' })
-	  )
+	      React.createElement(
+	         'h1',
+	         null,
+	         '4'
+	      )
+	   )
 	), document.getElementById('test'));
 
 /***/ },
@@ -20228,298 +20222,675 @@
 	module.exports = ReactMount.renderSubtreeIntoContainer;
 
 /***/ },
-/* 168 */,
-/* 169 */,
-/* 170 */,
-/* 171 */,
-/* 172 */,
-/* 173 */,
-/* 174 */,
-/* 175 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	__webpack_require__(176);
-	var React = __webpack_require__(1);
-	var Nav = __webpack_require__(177);
+	var _react = __webpack_require__(1);
 
-	function getDefaultActiveKey(props) {
-	    var activeKey = void 0;
-	    React.Children.forEach(props.children, function (child) {
-	        if (!activeKey && !child.props.disabled) {
-	            activeKey = child.key;
-	        }
-	    });
-	    return activeKey;
-	}
+	var _react2 = _interopRequireDefault(_react);
 
-	function getDefaultTabBarContent(props) {
-	    // let activeKey;
-	    var tabBarContent = [];
-	    React.Children.forEach(props.children, function (child) {
-	        // if (!activeKey && !child.props.disabled) {
-	        //   activeKey = child.key;
-	        // }
-	        var item = {};
-	        item['tabBar'] = child.props.tab;
-	        item['key'] = child.key;
-	        tabBarContent.push(item);
-	    });
-	    return tabBarContent;
-	}
+	var _innerSlider = __webpack_require__(169);
 
-	var TabContainer = React.createClass({
-	    displayName: 'TabContainer',
+	var _objectAssign = __webpack_require__(170);
 
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
-	    getInitialState: function getInitialState() {
-	        var props = this.props;
-	        var activeKey;
+	var _carousel = __webpack_require__(171);
 
-	        if ('activeKey' in props) {
-	            activeKey = props.activeKey;
-	        } else if ('defaultActiveKey' in props) {
-	            activeKey = props.defaultActiveKey;
-	        } else {
-	            activeKey = getDefaultActiveKey(props);
-	        }
-	        return {
-	            activeKey: activeKey
-	        };
-	    },
-	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	        console.log(nextProps);
-	    },
-	    getTabPanes: function getTabPanes() {
-	        var state = this.state;
-	        var props = this.props;
-	        var activeKey = state.activeKey;
-	        var children = props.children;
-	        var newChildren = [];
-	        // console.log('activeKey',activeKey)
-	        React.Children.forEach(children, function (child) {
-	            var key = child.key;
-	            var active = activeKey === key;
-	            if (active) {
-	                newChildren.push(React.cloneElement(child, {
-	                    active: active,
-	                    // eventKey: key,
-	                    rootPrefixCls: props.prefixCls
-	                }));
-	            }
-	        });
-	        // console.log(newChildren);
-	        return newChildren;
+	var _carousel2 = _interopRequireDefault(_carousel);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * @file Carousl 跑马灯
+	 * @author xijiawei@baidu.com
+	 * @description
+	 *     react写的跑马灯组件
+	 */
+
+	var defaultProps = {
+	    slidesToShow: 1,
+	    isAutoPlay: false
+	};
+
+	var Slider = _react2.default.createClass({
+	    displayName: 'Slider',
+
+	    getDefaultProps: function getDefaultProps() {
+	        return defaultProps;
 	    },
 	    render: function render() {
-	        var props = this.props;
-	        var tabBarContent = getDefaultTabBarContent(props);
-	        var tabPanes = this.getTabPanes();
-	        return React.createElement(
+	        return _react2.default.createElement(
 	            'div',
-	            null,
-	            React.createElement(Nav, { tabBarContent: tabBarContent,
-	                onTabClick: this.onTabClick,
-	                activeKey: this.state.activeKey
-	            }),
-	            React.createElement(
-	                'div',
-	                null,
-	                tabPanes
+	            { className: 'slider-wrap' },
+	            _react2.default.createElement(
+	                _innerSlider.InnerSlider,
+	                this.props,
+	                this.props.children
 	            )
 	        );
-	    },
-	    onTabClick: function onTabClick(key) {
-	        // console.log(key);
-	        this.setState({
-	            activeKey: key
-	        });
 	    }
 	});
 
-	module.exports = {
-	    Tab: TabContainer,
-	    TabPane: __webpack_require__(178)
-	};
+	module.exports = Slider;
 
 /***/ },
-/* 176 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-	module.exports = {"tabPane":"tabs__tabPane___2Ye--","tabBar":"tabs__tabBar___2h-sq","tabNav":"tabs__tabNav___1ROUr","tabBarItem":"tabs__tabBarItem___3YMO_","activeBar":"tabs__activeBar___1ss12","tabinkBar":"tabs__tabinkBar___1y1mG","inkbar-forward":"tabs__inkbar-forward___1TOY3","inkbar-backward":"tabs__inkbar-backward___Z917P","paneEnter":"tabs__paneEnter___jh1Qv","paneEnterActive":"tabs__paneEnterActive___1tMi3"};
-
-/***/ },
-/* 177 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.InnerSlider = undefined;
 
-	var React = __webpack_require__(1);
-	var style = __webpack_require__(176);
+	var _react = __webpack_require__(1);
 
-	var Nav = React.createClass({
-	    displayName: 'Nav',
+	var _react2 = _interopRequireDefault(_react);
 
-	    propTypes: {
-	        tabBarContent: React.PropTypes.array,
-	        onTabClick: React.PropTypes.func
-	    },
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            tabBarContent: []
-	        };
-	    },
+	var _objectAssign = __webpack_require__(170);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	var _carousel = __webpack_require__(171);
+
+	var _carousel2 = _interopRequireDefault(_carousel);
+
+	var _mixin = __webpack_require__(172);
+
+	var _mixin2 = _interopRequireDefault(_mixin);
+
+	var _eventHandlers = __webpack_require__(174);
+
+	var _eventHandlers2 = _interopRequireDefault(_eventHandlers);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var defaultProps = {
+	    slidesToShow: 1,
+	    slidesToScroll: 1,
+	    touchThreshold: 5,
+	    speed: 500,
+	    cssEase: 'ease',
+	    autoplay: true,
+	    autoplaySpeed: 3000,
+	    pauseOnHover: true
+	};
+
+	var InnerSlider = exports.InnerSlider = _react2.default.createClass({
+	    displayName: 'InnerSlider',
+
+	    mixins: [_mixin2.default, _eventHandlers2.default],
 	    getInitialState: function getInitialState() {
 	        return {
-	            tabBarContent: this.props.tabBarContent,
-	            inkBarLeft: 0,
-	            inkBarDirection: ''
+	            trackStyle: {},
+	            sliderStyle: {},
+	            trackWidth: 0,
+	            slideWidth: 0,
+	            listWidth: 0,
+	            slideCount: 0,
+	            currentSlide: 0,
+	            currentLeft: null,
+	            swipeLeft: null,
+	            dragging: false,
+	            animating: false,
+	            touchObject: {
+	                startX: 0,
+	                startY: 0,
+	                curX: 0,
+	                curY: 0
+	            }
 	        };
 	    },
-	    componentDidMount: function componentDidMount() {
-	        var activeTab = this.refs.activeTab;
-	        var tabBar = this.refs.tabBar;
-	        var left = this.offset(activeTab).left - this.offset(tabBar).left;
-	        var inBarNode = this.refs.inkBar;
-	        var right = tabBar.offsetWidth - activeTab.offsetWidth - left;
-
-	        inBarNode.style.left = left + 'px';
-	        inBarNode.style.right = right + 'px';
+	    getDefaultProps: function getDefaultProps() {
+	        return defaultProps;
 	    },
-	    componentDidUpdate: function componentDidUpdate(component) {
-	        var activeTab = this.refs.activeTab;
-	        var tabBar = this.refs.tabBar;
-	        var left = this.offset(activeTab).left - this.offset(tabBar).left;
-	        var inBarNode = this.refs.inkBar;
-	        var right = tabBar.offsetWidth - activeTab.offsetWidth - left;
-
-	        // console.log();
-	        // inBarNode.className = inBarNode.className.replace('inkbar-forward','');
-	        // inBarNode.className = inBarNode.className.replace('inkbar-backward','');
-
-	        if (parseInt(inBarNode.style.left) > left) {
-	            inBarNode.className = style.tabinkBar + ' ' + style['inkbar-backward'];
-	        } else {
-	            inBarNode.className = style.tabinkBar + ' ' + style['inkbar-forward'];
-	        }
-
-	        inBarNode.style.left = left + 'px';
-	        inBarNode.style.right = right + 'px';
+	    componentDidMount: function componentDidMount() {
+	        this.init(this.props);
 	    },
 	    render: function render() {
 	        var _this = this;
 
-	        var tabs = this.state.tabBarContent.map(function (str) {
-	            var ref = {};
+	        var slides = [];
+	        var preCloneSlides = [];
+	        var postCloneSlides = [];
+	        var count = _react2.default.Children.count(this.props.children);
 
-	            if (str.key == _this.props.activeKey) {
-	                ref.ref = 'activeTab';
-	            }
-	            return React.createElement(
-	                'li',
-	                _extends({ className: str.key == _this.props.activeKey ? style.activeBar : style.tabBarItem,
-	                    key: str.key,
-	                    onClick: _this.onTabClick.bind(_this, str.key)
-	                }, ref),
-	                str.tabBar
+	        _react2.default.Children.forEach(this.props.children, function (elem, index) {
+	            var child = _react2.default.createElement(
+	                'div',
+	                { className: 'slider-item', style: _this.state.sliderStyle },
+	                elem
 	            );
+	            slides.push(_react2.default.cloneElement(child, {
+	                key: index,
+	                'data-index': index
+	            }));
+
+	            if (index === 0) {
+	                var key = count + index;
+	                preCloneSlides.push(_react2.default.cloneElement(child, {
+	                    key: key,
+	                    'data-index': key
+	                }));
+	            }
+
+	            if (index === count - 1) {
+	                var key = 0 - (count - index);
+	                postCloneSlides.push(_react2.default.cloneElement(child, {
+	                    key: key,
+	                    'data-index': key
+	                }));
+	            }
 	        });
 
-	        return React.createElement(
+	        var sliders = postCloneSlides.concat(slides, preCloneSlides);
+	        return _react2.default.createElement(
 	            'div',
-	            { className: style.tabBar, ref: 'tabBar' },
-	            React.createElement('div', { className: style.tabinkBar, ref: 'inkBar' }),
-	            React.createElement(
-	                'ul',
-	                { className: style.tabNav },
-	                tabs
+	            { className: 'slider-list', ref: 'list', onMouseEnter: this.onInnerSliderEnter, onMouseLeave: this.onInnerSliderLeave },
+	            _react2.default.createElement(
+	                'div',
+	                {
+	                    className: 'slider-track',
+	                    ref: 'track',
+	                    style: this.state.trackStyle,
+	                    onMouseDown: this.swipeStart,
+	                    onMouseMove: this.swipeMove,
+	                    onMouseUp: this.swipeEnd,
+	                    onMouseLeave: this.state.dragging ? this.swipeEnd : null,
+	                    onTouchStart: this.swipeStart,
+	                    onTouchMove: this.swipeMove,
+	                    onTouchEnd: this.swipeEnd,
+	                    onTouchCancel: this.state.dragging ? this.swipeEnd : null },
+	                sliders
 	            )
 	        );
-	    },
-	    onTabClick: function onTabClick(key) {
-	        this.props.onTabClick(key);
-	    },
-	    getInkBarOffset: function getInkBarOffset() {
-	        var activeTab = this.refs.activeTab;
-	        var tabBar = this.refs.tabBar;
-	        var left = this.offset(activeTab).left - this.offset(tabBar).left;
-	        var inBarNode = this.refs.inkBar;
-	        var right = tabBar.offsetWidth - activeTab.offsetWidth - left;
-
-	        return {
-	            left: left,
-	            right: right
-	        };
-	    },
-	    offset: function offset(elem) {
-	        var box = void 0;
-	        var x = void 0;
-	        var y = void 0;
-	        var doc = elem.ownerDocument;
-	        var body = doc.body;
-	        var docElem = doc && doc.documentElement;
-	        box = elem.getBoundingClientRect();
-	        x = box.left;
-	        y = box.top;
-	        x -= docElem.clientLeft || body.clientLeft || 0;
-	        y -= docElem.clientTop || body.clientTop || 0;
-	        var w = doc.defaultView || doc.parentWindow;
-	        // x += getScroll(w);
-	        // y += getScroll(w, true);
-	        return {
-	            left: x, top: y
-	        };
 	    }
-
 	});
 
-	module.exports = Nav;
+/***/ },
+/* 170 */
+/***/ function(module, exports) {
+
+	'use strict';
+	/* eslint-disable no-unused-vars */
+
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	function shouldUseNative() {
+		try {
+			if (!Object.assign) {
+				return false;
+			}
+
+			// Detect buggy property enumeration order in older V8 versions.
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+			var test1 = new String('abc'); // eslint-disable-line
+			test1[5] = 'de';
+			if (Object.getOwnPropertyNames(test1)[0] === '5') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test2 = {};
+			for (var i = 0; i < 10; i++) {
+				test2['_' + String.fromCharCode(i)] = i;
+			}
+			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+				return test2[n];
+			});
+			if (order2.join('') !== '0123456789') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test3 = {};
+			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+				test3[letter] = letter;
+			});
+			if (Object.keys(Object.assign({}, test3)).join('') !== 'abcdefghijklmnopqrst') {
+				return false;
+			}
+
+			return true;
+		} catch (e) {
+			// We don't expect any of the above to throw, but better to be safe.
+			return false;
+		}
+	}
+
+	module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (Object.getOwnPropertySymbols) {
+				symbols = Object.getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
+	};
 
 /***/ },
-/* 178 */
+/* 171 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var style = __webpack_require__(176);
-	var React = __webpack_require__(1);
-
-	var TabPane = React.createClass({
-	    displayName: 'TabPane',
-
-
-	    propTypes: {
-	        active: React.PropTypes.bool
-	    },
-	    componentDidMount: function componentDidMount() {
-	        this.paneEnter();
-	    },
-	    componentDidUpdate: function componentDidUpdate() {
-	        this.paneEnter();
-	    },
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            active: false
-	        };
-	    },
-	    render: function render() {
-	        return React.createElement(
-	            'div',
-	            { className: style.TabPane + ' ' + style.paneEnter, ref: 'pane' },
-	            this.props.children
-	        );
-	    },
-	    paneEnter: function paneEnter() {
-	        var styles = [style.TabPane, style.paneEnter, style.paneEnterActive];
-	        this.refs.pane.className = styles.join(' ');
-	    }
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
 	});
 
-	module.exports = TabPane;
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(33);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _ReactTransitionEvents = __webpack_require__(173);
+
+	var _ReactTransitionEvents2 = _interopRequireDefault(_ReactTransitionEvents);
+
+	var _objectAssign = __webpack_require__(170);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var helpers = {
+	    init: function init(props) {
+	        var slideCount = _react2.default.Children.count(props.children);
+	        var listWidth = this.getWidth(_reactDom2.default.findDOMNode(this.refs.list));
+	        var trackWidth = this.getWidth(_reactDom2.default.findDOMNode(this.refs.track));
+	        var slideWidth = this.getWidth(_reactDom2.default.findDOMNode(this)) / props.slidesToShow;
+
+	        var spec = (0, _objectAssign2.default)({
+	            trackWidth: listWidth * (slideCount + 2) + 'px',
+	            left: 0 - (this.state.currentSlide + 1) * listWidth
+	        }, this.props);
+
+	        this.setState({
+	            sliderStyle: {
+	                width: listWidth + 'px'
+	            },
+	            trackStyle: this.getTrackCss(spec),
+	            slideCount: slideCount,
+	            currentLeft: spec.left,
+	            listWidth: listWidth,
+	            trackWidth: spec.trackWidth,
+	            slideWidth: slideWidth
+	        });
+	    },
+	    update: function update(props) {
+	        var slideCount = _react2.default.Children.count(props.children);
+	        var listWidth = this.getWidth(_reactDom2.default.findDOMNode(this.refs.list));
+	        var trackWidth = this.getWidth(_reactDom2.default.findDOMNode(this.refs.track));
+	        var slideWidth = this.getWidth(_reactDom2.default.findDOMNode(this)) / props.slidesToShow;
+
+	        var spec = {
+	            trackWidth: listWidth * (slideCount + 2) + 'px',
+	            left: 0 - (this.state.currentSlide + 1) * listWidth
+	        };
+	        this.setState({
+	            sliderStyle: {
+	                width: listWidth + 'px'
+	            },
+	            trackStyle: this.getTrackCss(spec),
+	            slideCount: slideCount,
+	            listWidth: listWidth,
+	            trackWidth: spec.trackWidth,
+	            slideWidth: slideWidth
+	        });
+	    },
+	    getWidth: function getWidth(elem) {
+	        return elem.getBoundingClientRect().width || elem.offsetWidth;
+	    },
+	    getTrackLeft: function getTrackLeft(spec) {
+	        var slideOffset = 0;
+	        var targetLeft;
+	        // var targetSlide;
+	        // return this.state.currentLeft;
+	        var targetLeft = 0 - (spec.slideIndex + 1) * spec.slideWidth + slideOffset;
+	        return targetLeft;
+	    },
+	    getTrackCss: function getTrackCss(spec) {
+
+	        var trackWidth = spec.trackWidth || (spec.slideCount + 2 * spec.slidesToShow) * spec.slideWidth;
+
+	        var style = {
+	            opacity: 1,
+	            width: trackWidth,
+	            WebkitTransform: 'translate3d(' + spec.left + 'px, 0px, 0px)',
+	            transform: 'translate3d(' + spec.left + 'px, 0px, 0px)',
+	            transition: '',
+	            WebkitTransition: '',
+	            msTransform: 'translateX(' + spec.left + 'px)'
+	        };
+	        return style;
+	    },
+	    swipeDirection: function swipeDirection(touchObject) {
+	        var xDist, yDist, r, swipeAngle;
+
+	        xDist = touchObject.startX - touchObject.curX;
+	        yDist = touchObject.startY - touchObject.curY;
+	        r = Math.atan2(yDist, xDist);
+
+	        swipeAngle = Math.round(r * 180 / Math.PI);
+	        if (swipeAngle < 0) {
+	            swipeAngle = 360 - Math.abs(swipeAngle);
+	        }
+	        if (swipeAngle <= 45 && swipeAngle >= 0 || swipeAngle <= 360 && swipeAngle >= 315) {
+	            return this.props.rtl === false ? 'left' : 'right';
+	        }
+	        if (swipeAngle >= 135 && swipeAngle <= 225) {
+	            return this.props.rtl === false ? 'right' : 'left';
+	        }
+
+	        return 'vertical';
+	    },
+	    slideHandler: function slideHandler(index) {
+	        var _this = this;
+
+	        var targetSlide, currentSlide;
+	        var targetLeft, currentLeft;
+	        var _callback;
+
+	        targetSlide = index;
+	        currentSlide = this.state.currentSlide;
+
+	        targetLeft = this.getTrackLeft((0, _objectAssign2.default)({
+	            slideIndex: targetSlide,
+	            trackRef: this.refs.track
+	        }, this.props, this.state));
+
+	        if (targetSlide < 0) {
+	            currentSlide = this.state.slideCount + targetSlide;
+	        } else if (targetSlide >= this.state.slideCount) {
+	            currentSlide = targetSlide - this.state.slideCount;
+	        } else {
+	            currentSlide = targetSlide;
+	        }
+
+	        currentLeft = this.getTrackLeft((0, _objectAssign2.default)({
+	            slideIndex: currentSlide,
+	            trackRef: this.refs.track
+	        }, this.props, this.state));
+
+	        var nextStateChanges = {
+	            animating: false,
+	            currentSlide: currentSlide,
+	            trackStyle: this.getTrackCss((0, _objectAssign2.default)({ left: currentLeft }, this.props, this.state)),
+	            swipeLeft: null
+	        };
+
+	        _callback = function callback() {
+	            _this.setState(nextStateChanges);
+	            // 回调函数
+	            // if (this.props.afterChange) {
+	            //   this.props.afterChange(currentSlide);
+	            // }
+	            _ReactTransitionEvents2.default.removeEndEventListener(_reactDom2.default.findDOMNode(_this.refs.track), _callback);
+	        };
+
+	        this.setState({
+	            animating: true,
+	            currentSlide: currentSlide,
+	            trackStyle: this.getTrackAnimateCSS((0, _objectAssign2.default)({ left: targetLeft }, this.props, this.state))
+	        }, function () {
+	            _ReactTransitionEvents2.default.addEndEventListener(_reactDom2.default.findDOMNode(this.refs.track), _callback);
+	        });
+	    },
+	    getTrackAnimateCSS: function getTrackAnimateCSS(spec) {
+	        var style = this.getTrackCss(spec);
+	        // useCSS is true by default so it can be undefined
+	        style.WebkitTransition = '-webkit-transform ' + spec.speed + 'ms ' + spec.cssEase;
+	        style.transition = 'transform ' + spec.speed + 'ms ' + spec.cssEase;
+	        return style;
+	    }
+	};
+
+	exports.default = helpers;
+
+/***/ },
+/* 173 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactTransitionEvents
+	 */
+
+	'use strict';
+
+	var ExecutionEnvironment = __webpack_require__(48);
+
+	var getVendorPrefixedEventName = __webpack_require__(105);
+
+	var endEvents = [];
+
+	function detectEvents() {
+	  var animEnd = getVendorPrefixedEventName('animationend');
+	  var transEnd = getVendorPrefixedEventName('transitionend');
+
+	  if (animEnd) {
+	    endEvents.push(animEnd);
+	  }
+
+	  if (transEnd) {
+	    endEvents.push(transEnd);
+	  }
+	}
+
+	if (ExecutionEnvironment.canUseDOM) {
+	  detectEvents();
+	}
+
+	// We use the raw {add|remove}EventListener() call because EventListener
+	// does not know how to remove event listeners and we really should
+	// clean up. Also, these events are not triggered in older browsers
+	// so we should be A-OK here.
+
+	function addEventListener(node, eventName, eventListener) {
+	  node.addEventListener(eventName, eventListener, false);
+	}
+
+	function removeEventListener(node, eventName, eventListener) {
+	  node.removeEventListener(eventName, eventListener, false);
+	}
+
+	var ReactTransitionEvents = {
+	  addEndEventListener: function addEndEventListener(node, eventListener) {
+	    if (endEvents.length === 0) {
+	      // If CSS transitions are not supported, trigger an "end animation"
+	      // event immediately.
+	      window.setTimeout(eventListener, 0);
+	      return;
+	    }
+	    endEvents.forEach(function (endEvent) {
+	      addEventListener(node, endEvent, eventListener);
+	    });
+	  },
+
+	  removeEndEventListener: function removeEndEventListener(node, eventListener) {
+	    if (endEvents.length === 0) {
+	      return;
+	    }
+	    endEvents.forEach(function (endEvent) {
+	      removeEventListener(node, endEvent, eventListener);
+	    });
+	  }
+	};
+
+	module.exports = ReactTransitionEvents;
+
+/***/ },
+/* 174 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(33);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _ReactTransitionEvents = __webpack_require__(173);
+
+	var _ReactTransitionEvents2 = _interopRequireDefault(_ReactTransitionEvents);
+
+	var _objectAssign = __webpack_require__(170);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var handlers = {
+	    swipeStart: function swipeStart(e) {
+	        if (this.state.animating) {
+	            return;
+	        }
+	        var touches, posX, posY;
+
+	        posX = e.touches !== undefined ? e.touches[0].pageX : e.clientX;
+	        posY = e.touches !== undefined ? e.touches[0].pageY : e.clientY;
+	        this.setState({
+	            dragging: true,
+	            touchObject: {
+	                startX: posX,
+	                startY: posY,
+	                curX: posX,
+	                curY: posY
+	            }
+	        });
+	    },
+	    swipeMove: function swipeMove(e) {
+	        if (!this.state.dragging) {
+	            return;
+	        }
+	        if (this.state.animating) {
+	            return;
+	        }
+	        var swipeLeft;
+	        var curLeft, positionOffset;
+	        var touchObject = this.state.touchObject;
+	        touchObject.curX = e.touches ? e.touches[0].pageX : e.clientX;
+	        touchObject.curY = e.touches ? e.touches[0].pageY : e.clientY;
+	        touchObject.swipeLength = Math.round(Math.sqrt(Math.pow(touchObject.curX - touchObject.startX, 2)));
+	        positionOffset = touchObject.curX > touchObject.startX ? 1 : -1;
+	        var touchSwipeLength = touchObject.swipeLength;
+
+	        curLeft = this.getTrackLeft((0, _objectAssign2.default)({
+	            slideIndex: this.state.currentSlide,
+	            trackRef: this.refs.track
+	        }, this.props, this.state));
+
+	        swipeLeft = curLeft + touchSwipeLength * positionOffset;
+
+	        this.setState({
+	            touchObject: touchObject,
+	            swipeLeft: swipeLeft,
+	            trackStyle: this.getTrackCss((0, _objectAssign2.default)({ left: swipeLeft }, this.props, this.state))
+	        });
+	    },
+	    swipeEnd: function swipeEnd(e) {
+	        if (!this.state.dragging) {
+	            return;
+	        }
+
+	        var touchObject = this.state.touchObject;
+	        var minSwipe = this.state.listWidth / this.props.touchThreshold;
+	        var swipeDirection = this.swipeDirection(touchObject);
+
+	        this.setState({
+	            dragging: false,
+	            // edgeDragged: false,
+	            // swiped: false,
+	            swipeLeft: null,
+	            touchObject: {}
+	        });
+
+	        if (touchObject.swipeLength > minSwipe) {
+	            e.preventDefault();
+	            if (swipeDirection === 'left') {
+	                this.slideHandler(this.state.currentSlide - this.props.slidesToScroll);
+	            } else if (swipeDirection === 'right') {
+	                this.slideHandler(this.state.currentSlide + this.props.slidesToScroll);
+	            } else {
+	                this.slideHandler(this.state.currentSlide);
+	            }
+	        } else {
+	            var currentLeft = this.getTrackLeft((0, _objectAssign2.default)({
+	                slideIndex: this.state.currentSlide,
+	                trackRef: this.refs.track
+	            }, this.props, this.state));
+
+	            this.setState({
+	                trackStyle: this.getTrackAnimateCSS((0, _objectAssign2.default)({ left: currentLeft }, this.props, this.state))
+	            });
+	        }
+	    },
+	    onInnerSliderLeave: function onInnerSliderLeave(e) {
+	        if (this.props.autoplay && this.props.pauseOnHover) {
+	            this.autoPlay();
+	        }
+	    },
+	    onInnerSliderEnter: function onInnerSliderEnter(e) {
+	        if (this.props.autoplay && this.props.pauseOnHover) {
+	            this.pause();
+	        }
+	    }
+	};
+
+	exports.default = handlers;
 
 /***/ }
 /******/ ]);

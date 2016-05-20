@@ -9,6 +9,7 @@
   "author": "sadpig",
   "license": "ISC",
   "dependencies": {
+    "object-assign": "^4.1.0",
     "rc-tabs": "^5.9.0",
     "react": "^15.0.2",
     "react-dom": "^15.0.2"
