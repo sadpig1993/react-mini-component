@@ -28,6 +28,8 @@ var helpers = {
             trackWidth: spec.trackWidth,
             slideWidth: slideWidth
         });
+
+        this.autoPlay()
     },
     update: function (props) {
         var slideCount = React.Children.count(props.children);
@@ -156,10 +158,28 @@ var helpers = {
         return style;
     },
     autoPlay: function () {
-
+        if (this.state.autoPlayTimer) {
+          return;
+        }
+        var play = () => {
+            if (this.state.mounted) {
+                var nextIndex = this.state.currentSlide + this.props.slidesToScroll;
+                this.slideHandler(nextIndex);
+            }
+        };
+        if (this.props.autoplay) {
+          this.setState({
+            autoPlayTimer: window.setInterval(play, this.props.autoplaySpeed)
+          });
+        }
     },
     pause: function () {
-
+        if (this.state.autoPlayTimer) {
+            window.clearInterval(this.state.autoPlayTimer);
+                this.setState({
+                    autoPlayTimer: null
+                });
+        }
     }
 };
 

@@ -20252,7 +20252,13 @@
 
 	var defaultProps = {
 	    slidesToShow: 1,
-	    isAutoPlay: false
+	    slidesToScroll: 1,
+	    touchThreshold: 5,
+	    speed: 500,
+	    cssEase: 'ease',
+	    autoplay: true,
+	    autoplaySpeed: 3000,
+	    pauseOnHover: true
 	};
 
 	var Slider = _react2.default.createClass({
@@ -20337,6 +20343,7 @@
 	            swipeLeft: null,
 	            dragging: false,
 	            animating: false,
+	            autoPlayTimer: null,
 	            touchObject: {
 	                startX: 0,
 	                startY: 0,
@@ -20348,8 +20355,18 @@
 	    getDefaultProps: function getDefaultProps() {
 	        return defaultProps;
 	    },
+	    componentWillMount: function componentWillMount() {
+	        this.setState({
+	            mounted: true
+	        });
+	    },
 	    componentDidMount: function componentDidMount() {
 	        this.init(this.props);
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        if (this.state.autoPlayTimer) {
+	            window.clearInterval(this.state.autoPlayTimer);
+	        }
 	    },
 	    render: function render() {
 	        var _this = this;
@@ -20556,6 +20573,8 @@
 	            trackWidth: spec.trackWidth,
 	            slideWidth: slideWidth
 	        });
+
+	        this.autoPlay();
 	    },
 	    update: function update(props) {
 	        var slideCount = _react2.default.Children.count(props.children);
@@ -20683,8 +20702,32 @@
 	        style.transition = 'transform ' + spec.speed + 'ms ' + spec.cssEase;
 	        return style;
 	    },
-	    autoPlay: function autoPlay() {},
-	    pause: function pause() {}
+	    autoPlay: function autoPlay() {
+	        var _this2 = this;
+
+	        if (this.state.autoPlayTimer) {
+	            return;
+	        }
+	        var play = function play() {
+	            if (_this2.state.mounted) {
+	                var nextIndex = _this2.state.currentSlide + _this2.props.slidesToScroll;
+	                _this2.slideHandler(nextIndex);
+	            }
+	        };
+	        if (this.props.autoplay) {
+	            this.setState({
+	                autoPlayTimer: window.setInterval(play, this.props.autoplaySpeed)
+	            });
+	        }
+	    },
+	    pause: function pause() {
+	        if (this.state.autoPlayTimer) {
+	            window.clearInterval(this.state.autoPlayTimer);
+	            this.setState({
+	                autoPlayTimer: null
+	            });
+	        }
+	    }
 	};
 
 	exports.default = helpers;

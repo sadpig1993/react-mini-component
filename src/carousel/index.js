@@ -12,7 +12,13 @@ import styles from './carousel.css'
 
 var defaultProps = {
     slidesToShow: 1,
-    isAutoPlay: false
+    slidesToScroll: 1,
+    touchThreshold: 5,
+    speed: 500,
+    cssEase: 'ease',
+    autoplay: true,
+    autoplaySpeed: 3000,
+    pauseOnHover: true
 }
 
 var Slider = React.createClass({

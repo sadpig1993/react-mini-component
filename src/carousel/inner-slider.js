@@ -30,6 +30,7 @@ export var InnerSlider = React.createClass({
             swipeLeft: null,
             dragging: false,
             animating: false,
+            autoPlayTimer: null,
             touchObject: {
                 startX: 0,
                 startY: 0,
@@ -41,8 +42,18 @@ export var InnerSlider = React.createClass({
     getDefaultProps: function () {
         return defaultProps;
     },
-    componentDidMount: function() {
+    componentWillMount: function () {
+        this.setState({
+          mounted: true
+        });
+    },
+    componentDidMount: function () {
         this.init(this.props);
+    },
+    componentWillUnmount: function () {
+        if (this.state.autoPlayTimer) {
+            window.clearInterval(this.state.autoPlayTimer);
+        }
     },
     render: function () {
 
